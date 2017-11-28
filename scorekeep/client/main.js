@@ -7,13 +7,20 @@ import {Players} from './../imports/api/players';
 
 
 //transfomer l'objet array en jsx array
-const renderPlayers = function (playersList){
-  return playersList.map(function(player){
-    return <p key={player._id}>{player.name} has {player.score} point(s).</p>;
+const renderPlayers = (playersList) => {
+  return playersList.map((player) => {
+    return (
+      <p key={player._id}>
+        {player.name} has {player.score} point(s).
+        <button onClick={() => {
+          alert('deleted')
+        }}>X</button>
+      </p>
+    );
   });
 };
 
-const handleSubmit = function (e){
+const handleSubmit = (e) => {
   e.preventDefault();
   let playerName = e.target.playerName.value;
 
@@ -27,10 +34,10 @@ const handleSubmit = function (e){
   };
 };
 
-Meteor.startup(function () {
+Meteor.startup(() => {
 
   //allows you to run a function that depends on reactive data sources, in such a way that if there are changes to the data later, the function will be rerun
-  Tracker.autorun(function () {
+  Tracker.autorun(() => {
     let players = Players.find().fetch();
     let title = 'Score Keep';
     let name = 'Mike';
