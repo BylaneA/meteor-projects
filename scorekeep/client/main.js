@@ -13,6 +13,20 @@ const renderPlayers = function (playersList){
   });
 };
 
+const handleSubmit = function (e){
+  e.preventDefault();
+  let playerName = e.target.playerName.value;
+
+  if(playerName){
+    e.target.playerName.value='';
+    //players insert 
+    Players.insert({
+      name: playerName,
+      score: 0
+    });
+  };
+};
+
 Meteor.startup(function () {
 
   //allows you to run a function that depends on reactive data sources, in such a way that if there are changes to the data later, the function will be rerun
@@ -26,18 +40,13 @@ Meteor.startup(function () {
         <p>Hello {name}!</p>
         <p>This is my second p.</p>
         {renderPlayers(players)}
-        <form>
+        <form onSubmit={handleSubmit}>
           <input type="text" name="playerName" placeholder="Player name"/>
           <button>Add Player</button>
         </form>
       </div>
     );
   ReactDOM.render(jsx, document.getElementById('app'));
-  });
-
-  Players.insert({
-    name: 'Bilane',
-    score: 9
   });
 
 
