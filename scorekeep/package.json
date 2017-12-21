@@ -6,8 +6,15 @@
   },
   "dependencies": {
     "babel-runtime": "^6.26.0",
+<<<<<<< HEAD
     "meteor-node-stubs": "~0.2.0",
     "react": "^15.3.2",
     "react-dom": "^15.3.2"
+=======
+    "meteor-node-stubs": "^0.3.2",
+    "prop-types": "^15.6.0",
+    "react": "^16.1.1",
+    "react-dom": "^16.1.1"
+>>>>>>> 39b6c6f3d3735081d4a3ce48fd6bd672b555484e
   }
 }

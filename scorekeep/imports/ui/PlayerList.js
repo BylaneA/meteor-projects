@@ -20,4 +20,3 @@ export default class PlayerList extends React.Component {
     );
   }
 };
-
