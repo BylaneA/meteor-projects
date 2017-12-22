@@ -5,16 +5,18 @@ import {Players} from './../api/players';
 export default class Player extends React.Component {
   render() {
     return (
-      <p key={this.props.player._id}>
-        {this.props.player.name} has {this.props.player.score} point(s).
-        <button onClick={() => {
+      <div key={this.props.player._id} className="item">
+        <p>
+          {this.props.player.name} has {this.props.player.score} point(s).
+        </p>
+        <button className="button button--round" onClick={() => {
           Players.update(this.props.player._id, {$inc: {score: -1}});
         }}>-1</button>
-        <button onClick={() => {
+        <button className="button button--round" onClick={() => {
           Players.update(this.props.player._id, {$inc: {score: 1}});
         }}>+1</button>
-        <button onClick={() => Players.remove(this.props.player._id)}>X</button>
-      </p>
+        <button className="button button--round" onClick={() => Players.remove(this.props.player._id)}>X</button>
+      </div>
     );
   }
 };
