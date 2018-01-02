@@ -1,22 +1,64 @@
-import { Template } from 'meteor/templating';
-import { ReactiveVar } from 'meteor/reactive-var';
+import  { Meteor } from 'meteor/meteor';
+import React  from 'react';
+import ReactDOM from 'react-dom';
+import { Router, Switch, Route, withRouter } from 'react-router';
+import createHistory from 'history/createBrowserHistory'
+import { Tracker } from 'meteor/tracker';
+import { PropsRoute, PublicRoute, PrivateRoute } from 'react-router-with-props';
 
-import './main.html';
+import Signup from '../imports/ui/Signup';
+import Link from '../imports/ui/Link';
+import NotFound from '../imports/ui/NotFound';
+import Login from '../imports/ui/Login';
 
-Template.hello.onCreated(function helloOnCreated() {
-  // counter starts at 0
-  this.counter = new ReactiveVar(0);
+const history = createHistory();
+
+const unauthenticatedPages = ['/','/signup'];
+const authenticatedPages = ['/links']
+let isUnauthenticatedPage = true;
+let isAuthenticatedPage = false;
+
+const ChangeTracker = withRouter(({match, location, history}) => {
+    const pathName = location.pathname;
+    isUnauthenticatedPage = unauthenticatedPages.includes(pathName);
+    isAuthenticatedPage = authenticatedPages.includes(pathName);
+
+    return false;
 });
 
-Template.hello.helpers({
-  counter() {
-    return Template.instance().counter.get();
-  },
+const routes = (
+  <Router history={history}>
+      <div>
+        <Switch>
+          <PublicRoute exact path="/" authed={false} redirectTo="/" component={Login} text="This route is for unauthed users"/>
+          <PublicRoute exact path="/signup" authed={false} redirectTo="/signup" component={Signup} text="This route is for unauthed users"/>
+          <PrivateRoute exact path="/links" authed={true} redirectTo="/links" component={Link} text="This is a private route"/>
+          // <Route path="/signup" component={Signup}/>
+          // <Route path="/links" component={Link}/>
+          //not working
+          <Route component={NotFound}/>
+        </Switch>
+
+        <ChangeTracker/>
+
+      </div>
+  </Router>
+);
+
+Tracker.autorun(()=>{
+  const isAuthenticated = !!Meteor.userId();
+    if (isAuthenticated){
+      if (isUnauthenticatedPage){
+        history.push('/links');
+      }
+    }else{
+        history.push('/');
+      }
+
+       console.log('Authenticated?', isAuthenticated);
 });
 
-Template.hello.events({
-  'click button'(event, instance) {
-    // increment the counter when button is clicked
-    instance.counter.set(instance.counter.get() + 1);
-  },
+
+Meteor.startup(() => {
+  ReactDOM.render(routes, document.getElementById('app'));
 });
